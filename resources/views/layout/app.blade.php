@@ -42,7 +42,7 @@
                     <li class="dropdown"><a href="#" data-toggle="dropdown"
                             class="nav-link dropdown-toggle nav-link-lg nav-link-user">
                             <img alt="image" src="../assets/img/avatar/avatar-1.png" class="rounded-circle mr-1">
-                            <div class="d-sm-none d-lg-inline-block">Hi, {{ session('first_name') ?? session('username') }}</div>
+                            <div class="d-sm-none d-lg-inline-block">Hi, {{ session('name') ?? session('username') }}</div>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right">
                             <a href="{{ url('auth/logout') }}" class="dropdown-item has-icon text-danger">
@@ -55,10 +55,10 @@
             <div class="main-sidebar">
                 <aside id="sidebar-wrapper">
                     <div class="sidebar-brand">
-                        <a href="index.html">Stisla</a>
+                        <a href="index.html">E-learning</a>
                     </div>
                     <div class="sidebar-brand sidebar-brand-sm">
-                        <a href="index.html">St</a>
+                        <a href="index.html">E-L</a>
                     </div>
                     @include('layout._partials.sidebar')
                 </aside>
@@ -102,6 +102,7 @@
     <script src="{{ asset('assets/plugins/datatables/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('assets/plugins/datatables/dataTables.bootstrap4.min.js') }}"></script>
     <script src="{{ asset('assets/plugins/select2/select2.min.js') }}"></script>
+    <script src="{{ asset('assets/plugins/swal/sweetalert.min.js') }}"></script>
 
     <!-- Template JS File -->
     <script src="{{ asset('assets/js/scripts.js') }}"></script>

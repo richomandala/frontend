@@ -217,7 +217,9 @@
 
   $.chatCtrl = function(element, chat) {
     var chat = $.extend({
+      id: '',
       position: 'chat-right',
+      name: '',
       text: '',
       time: moment(new Date().toISOString()).format('hh:mm'),
       picture: '',
@@ -227,10 +229,13 @@
     }, chat);
 
     var target = $(element),
-        element = '<div class="chat-item '+chat.position+'" style="display:none">' +
+        element = '<div id="chat_' + chat.id + '" class="chat-item '+chat.position+'" style="display:none">' +
                   '<img src="'+chat.picture+'">' +
                   '<div class="chat-details">' +
-                  '<div class="chat-text">'+chat.text+'</div>' +
+                  '<div class="chat-text">'+
+                  '<h6>' + chat.name + '</h6><hr>' +
+                  chat.text +
+                  '</div>' +
                   '<div class="chat-time">'+chat.time+'</div>' +
                   '</div>' +
                   '</div>',

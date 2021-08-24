@@ -13,6 +13,19 @@ function showDate($date = null, $format = "l, d F Y")
     return Carbon::parse($date)->locale('id')->translatedFormat($format);
 }
 
+function getDay($type = 'id')
+{
+    $today = strtotime('2021-08-30');
+    $date = date('w', $today);
+    if ($type == 'name') {
+        $day = [
+            'Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'
+        ];
+        $date = $day[$date];
+    }
+    return $date;
+}
+
 function showGender($gender) {
     $response = '';
     if ($gender == 1) {

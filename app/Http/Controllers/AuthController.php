@@ -45,8 +45,10 @@ class AuthController extends Controller
             session()->put('username', $data['username']);
             session()->put('email', $data['email']);
             if ($data['role_id'] == 2) {
+                session()->put('name', $data['name']);
                 session()->put('teacher_id', $data['teacher_id']);
             } elseif ($data['role_id'] == 3) {
+                session()->put('name', $data['name']);
                 session()->put('student_id', $data['student_id']);
                 session()->put('class_id', $data['class_id']);
             }

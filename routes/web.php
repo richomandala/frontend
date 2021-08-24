@@ -54,5 +54,9 @@ Route::middleware('token')->group(function () {
     Route::resource('class.classroom', ClassroomController::class);
     Route::resource('class.classroom.subjectmatter', SubjectmatterController::class);
     Route::resource('class.classroom.subjectmatter.classwork', ClassworkController::class);
+    Route::resource('classroom', ClassroomController::class);
     Route::resource('schedule', ScheduleController::class);
+
+    Route::get('getchat/{classroom}/{time?}', [ClassroomController::class, 'getChat']);
+    Route::post('postchat', [ClassroomController::class, 'postChat']);
 });

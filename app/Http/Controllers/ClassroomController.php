@@ -10,7 +10,7 @@ class ClassroomController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('superadmin')->except('show');
+        $this->middleware('superadmin')->except('index', 'show', 'getChat', 'postChat');
         $this->middleware('superadminteacher')->only('show');
 
         $this->endpoint = config('app.api_url') . 'classrooms/';
@@ -18,6 +18,8 @@ class ClassroomController extends Controller
         $this->teacher = config('app.api_url') . 'teachers/';
         $this->subject = config('app.api_url') . 'subjects/';
         $this->subject_matter = config('app.api_url') . 'subjectMatters/';
+        $this->schedule = config('app.api_url') . 'schedules/';
+        $this->roomchat = config('app.api_url') . 'roomchats/';
     }
 
     /**
@@ -27,7 +29,76 @@ class ClassroomController extends Controller
      */
     public function index()
     {
-        //
+        date_default_timezone_set("Asia/Jakarta");
+        $class = session('class_id');
+        $user = session('user_id');
+        $req_schedule = Http::withToken(session('token'))->get($this->schedule . 'getScheduleClass/' . $class);
+        $schedule = ($req_schedule->successful() && $req_schedule->json()['status'] == 200) ? $req_schedule->json()['data'] : [];
+        if (!$schedule) {
+            return view('classroom.no-schedule');
+        }
+        $data = [
+            'title' => 'Roomchats',
+            'user_id' => $user,
+            'class_id' => $class,
+            'schedule' => $schedule
+        ];
+
+        return view('classroom.index', $data);
+    }
+
+    public function getChat($classroom, $time = null)
+    {
+        if ($time) {
+            $req_chat = Http::withToken(session('token'))->get($this->roomchat . $classroom . '/' . $time);
+        } else {
+            $req_chat = Http::withToken(session('token'))->get($this->roomchat . $classroom);
+        }
+        $chat = ($req_chat->successful() && $req_chat->json()['status'] == 200) ? $req_chat->json()['data'] : [];
+        $error = true;
+        $data = [];
+        if ($chat) {
+            $error = false;
+            foreach ($chat as $c) {
+                $data[] = [
+                    'id' => $c['id'],
+                    'position' => ($c['user_id'] == session('user_id')) ? 'right' : 'left',
+                    'name' => $c['name'],
+                    'encode_name' => urlencode($c['name']),
+                    'chat' => $c['chat'],
+                    'time' => $c['time']
+                ];
+            }
+        }
+
+        $result = [
+            'error' => $error,
+            'data' => $data
+        ];
+        echo json_encode($result);
+    }
+
+    public function postChat(Request $request)
+    {
+        $data = [
+            'name' => session('name'),
+            'chat' => $request->post('chat'),
+            'is_teacher' => (session('teacher_id')) ? 1 : 0,
+            'classroom_id' => $request->post('classroom_id'),
+            'user_id' => session('user_id')
+        ];
+        
+        $store = Http::withToken(session('token'))->asJson()
+                            ->post($this->roomchat, $data);
+        if ($store->failed() || $store->json()['status'] != 200) {
+            $message = ($store->json()) ? $store->json()['error'] : "Pesan tidak terkirim";
+            echo json_encode([
+                'error' => true,
+                'msg' => $message
+            ]);
+        } else {
+            echo json_encode(['error' => false]);
+        }
     }
 
     /**
