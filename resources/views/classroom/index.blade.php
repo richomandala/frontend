@@ -65,7 +65,7 @@
                 }
             },
             error: function (error) {
-                swal('Error', error.statusText, 'error');
+                console.log(error.statusText)
             },
             complete: function () {
                 const date = new Date()
