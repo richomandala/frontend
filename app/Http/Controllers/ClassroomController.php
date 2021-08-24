@@ -30,9 +30,14 @@ class ClassroomController extends Controller
     public function index()
     {
         date_default_timezone_set("Asia/Jakarta");
-        $class = session('class_id');
         $user = session('user_id');
-        $req_schedule = Http::withToken(session('token'))->get($this->schedule . 'getScheduleClass/' . $class);
+        if (session('role_id') == 2) {
+            $teacher_id = session('teacher_id');
+            $req_schedule = Http::withToken(session('token'))->get($this->schedule . 'getScheduleTeacher/' . $teacher_id);
+        } elseif (session('role_id') == 3) {
+            $class = session('class_id');
+            $req_schedule = Http::withToken(session('token'))->get($this->schedule . 'getScheduleClass/' . $class);
+        }
         $schedule = ($req_schedule->successful() && $req_schedule->json()['status'] == 200) ? $req_schedule->json()['data'] : [];
         if (!$schedule) {
             return view('classroom.no-schedule');
@@ -40,7 +45,6 @@ class ClassroomController extends Controller
         $data = [
             'title' => 'Roomchats',
             'user_id' => $user,
-            'class_id' => $class,
             'schedule' => $schedule
         ];
 

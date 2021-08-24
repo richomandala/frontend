@@ -140,8 +140,7 @@ class SubjectmatterController extends Controller
             }
             $req_student = Http::withToken(session('token'))->get($this->student . 'findByClass/' . $class['id']);
             $student = ($req_student->successful() && $req_student->json()['status'] == 200) ? $req_student->json()['data'] : [];
-            
-            $req_classwork = Http::withToken(session('token'))->get($this->classwork . 'findBySubjectmatter/' . $id);
+            $req_classwork = Http::withToken(session('token'))->get($this->classwork . 'findBySubjectMatter/' . $id);
             $data_classwork = ($req_classwork->successful() && $req_classwork->json()['status'] == 200) ? $req_classwork->json()['data'] : [];
             $classwork = [];
             foreach ($data_classwork as $dc) {

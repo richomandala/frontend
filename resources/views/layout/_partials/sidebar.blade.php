@@ -35,6 +35,10 @@
             <i class="fas fa-book"></i>
             <span>Subject</span></a>
         </li> 
+        <li  @if ($url == 'classroom') class="active" @endif><a class="nav-link" href="{{ url('classroom') }}">
+            <i class="fas fa-chalkboard-teacher"></i>
+            <span>Classroom</span></a>
+        </li> 
     @elseif(session('role_id') == 3)    
         <li  @if ($url == 'classmate') class="active" @endif><a class="nav-link" href="{{ url('classmate') }}">
             <i class="fas fa-users"></i>

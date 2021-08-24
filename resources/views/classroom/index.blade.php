@@ -27,7 +27,7 @@
 @endsection
 @section('js')
 <script>
-    let last_update
+    let last_update = '{{ $schedule["time_start"] }}'
 
     $(document).ready(function () {
         getChat()
@@ -56,6 +56,7 @@
                                 id: chats[i].id,
                                 name: chats[i].name,
                                 text: (chats[i].chat != undefined ? chats[i].chat : ''),
+                                time: chats[i].time,
                                 picture: 'https://ui-avatars.com/api/?name=' + chats[i].encode_name,
                                 position: 'chat-' + chats[i].position,
                                 type: type
