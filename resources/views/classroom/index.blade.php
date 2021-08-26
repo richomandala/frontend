@@ -6,20 +6,25 @@
         <h4>Roomchat</h4>
     </div>
     <div class="card-body">
-        <div class="col-12 col-sm-12 col-lg-12">
-            <div class="card chat-box" id="mychatbox" style="height: 80vh">
-                <div class="card-body chat-content">
+        <div class="row">
+            <div class="col-sm-12 col-lg-8">
+                <div class="card chat-box" id="mychatbox" style="height: 80vh">
+                    <div class="card-body chat-content">
+                    </div>
+                    <div class="card-footer chat-form">
+                        <form id="chat-form">
+                            @csrf
+                            <input type="hidden" name="classroom_id" value="{{ $schedule['classroom_id'] }}">
+                            <input type="text" name="chat" class="form-control" placeholder="Type a message">
+                            <button class="btn btn-primary btn-submit">
+                                <i class="far fa-paper-plane"></i>
+                            </button>
+                        </form>
+                    </div>
                 </div>
-                <div class="card-footer chat-form">
-                    <form id="chat-form">
-                        @csrf
-                        <input type="hidden" name="classroom_id" value="{{ $schedule['classroom_id'] }}">
-                        <input type="text" name="chat" class="form-control" placeholder="Type a message">
-                        <button class="btn btn-primary btn-submit">
-                            <i class="far fa-paper-plane"></i>
-                        </button>
-                    </form>
-                </div>
+            </div>
+            <div class="col-lg-4">
+                {{ showFile($photo) }}
             </div>
         </div>
     </div>

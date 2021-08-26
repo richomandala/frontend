@@ -5,12 +5,14 @@ namespace App\Http\Controllers;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class ClassroomController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('superadmin')->except('index', 'show', 'getChat', 'postChat');
+        $this->middleware('superadmin')->except('index', 'show', 'getChat', 'postChat', 'postPresence');
         $this->middleware('superadminteacher')->only('show');
 
         $this->endpoint = config('app.api_url') . 'classrooms/';
@@ -20,6 +22,7 @@ class ClassroomController extends Controller
         $this->subject_matter = config('app.api_url') . 'subjectMatters/';
         $this->schedule = config('app.api_url') . 'schedules/';
         $this->roomchat = config('app.api_url') . 'roomchats/';
+        $this->presence = config('app.api_url') . 'presences/';
     }
 
     /**
@@ -40,14 +43,22 @@ class ClassroomController extends Controller
         }
         $schedule = ($req_schedule->successful() && $req_schedule->json()['status'] == 200) ? $req_schedule->json()['data'] : [];
         if (!$schedule) {
-            return view('classroom.no-schedule');
+            $data['title'] = 'Roomchats';
+            return view('classroom.no-schedule', $data);
         }
+        
         $data = [
             'title' => 'Roomchats',
             'user_id' => $user,
             'schedule' => $schedule
         ];
-
+        
+        $req_presence = Http::withToken(session('token'))->get($this->presence . $schedule['id'] . '/' . session('user_id'));
+        $presence = ($req_presence->successful() && $req_presence->json()['status'] == 200) ? $req_presence->json()['data'] : [];
+        if (!$presence) {
+            return view('classroom.photo', $data);
+        }
+        $data['photo'] = $presence['photo'];
         return view('classroom.index', $data);
     }
 
@@ -103,6 +114,31 @@ class ClassroomController extends Controller
         } else {
             echo json_encode(['error' => false]);
         }
+    }
+
+    public function postPresence(Request $request, $schedule)
+    {
+        try {
+            $requestPhoto = base64_decode($request->post('photo'));
+            $base64_str = substr($requestPhoto, strpos($requestPhoto, ",")+1);
+            $photo = base64_decode($base64_str);
+            $file_name = Str::random(10) . time() . '.jpeg';
+            Storage::disk('public')->put($file_name, $photo);
+            $data = [
+                'photo' => 'storage/' . $file_name,
+                'schedule_id' => $schedule,
+                'user_id' => session('user_id')
+            ];
+            $store = Http::withToken(session('token'))->asJson()
+                            ->post($this->presence, $data);
+            if ($store->failed() || $store->json()['status'] != 200) {
+                $message = ($store->json()) ? $store->json()['error'] : "Pesan tidak terkirim";
+                throw new Exception($message);
+            }
+        } catch (\Throwable $th) {
+            responseError($th->getMessage());
+        }
+        return redirect()->to('classroom');
     }
 
     /**

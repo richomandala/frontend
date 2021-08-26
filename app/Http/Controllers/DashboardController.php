@@ -18,7 +18,10 @@ class DashboardController extends Controller
     {
         $role_id = session('role_id');
         if ($role_id == 1) {
-            return view('dashboard.superadmin');
+            $data = [
+                'title' => 'Dashboard'
+            ];
+            return view('dashboard.superadmin', $data);
         }
         if ($role_id == 2) {
             $req_day = Http::withToken(session('token'))->get($this->day);

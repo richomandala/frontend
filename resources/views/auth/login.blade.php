@@ -95,10 +95,6 @@
                                 {{-- <h1 class="mb-2 display-4 font-weight-bold">Good Morning</h1> --}}
                                 <h5 class="font-weight-normal text-muted-transparent">Bogor, Indonesia</h5>
                             </div>
-                            Photo by <a
-                                href="https://unsplash.com/@sendi_r_gibran?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">sendi
-                                gibran</a> on <a
-                                href="https://unsplash.com/s/photos/bogor?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>
                         </div>
                     </div>
                 </div>
