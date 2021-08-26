@@ -8,7 +8,8 @@
     </div>
     <div class="card-body">
         <form class="form" method="POST"
-            action="{{ route('class.classroom.subjectmatter.store', [$data['class_id'], $data['id']]) }}">
+            action="{{ route('class.classroom.subjectmatter.store', [$data['class_id'], $data['id']]) }}"
+            enctype="multipart/form-data">
             @csrf
             <div class="form-group">
                 <label>Judul:</label>
@@ -32,8 +33,8 @@
             </div>
             <div class="form-group">
                 <label>File:</label>
-                <input type="text" name="file_path" class="form-control @error('file_path') is-invalid @enderror"
-                    placeholder="Masukkan file" value="{{ old('file_path') }}" required />
+                <input type="file" name="file_path" class="form-control @error('file_path') is-invalid @enderror"
+                    placeholder="Masukkan file" required />
                 @error('file_path')
                 <div class="invalid-feedback">
                     {{ $message }}

@@ -17,7 +17,7 @@
                 <p>
                     {{ $data['content'] }}
                 </p>
-                {{ showFile($data['content']) }}
+                {{ showFile(asset($data['file_path'])) }}
             </div>
             @if ($data['is_task'] == 1)
                 <div class="col-md-12 mt-5">
@@ -69,12 +69,12 @@
                 @elseif (session('role_id') == 3)
                     <div class="col-md-12">
                         @if (!$classwork)
-                            <form action="{{ route('class.classroom.subjectmatter.classwork.store', [$classroom['class_id'], $classroom['id'], $data['id']]) }}" method="post">
+                            <form action="{{ route('class.classroom.subjectmatter.classwork.store', [$classroom['class_id'], $classroom['id'], $data['id']]) }}" method="post" enctype="multipart/form-data">
                                 @csrf
                                 <div class="form-group">
                                     <label>File:</label>
-                                    <input type="text" name="file_path" class="form-control @error('file_path') is-invalid @enderror"
-                                        placeholder="Masukkan file" value="{{ old('file_path') }}" required />
+                                    <input type="file" name="file_path" class="form-control @error('file_path') is-invalid @enderror"
+                                        placeholder="Masukkan file" required />
                                     @error('file_path')
                                     <div class="invalid-feedback">
                                         {{ $message }}
@@ -85,7 +85,7 @@
                             </form>
                         @else
                             <p>Anda sudah mengumpulkan tugas ini.</p>
-                            {{ showFile($classwork['file_path']) }}
+                            {{ showFile(asset($classwork['file_path'])) }}
                         @endif
                     </div>
                 @endif

@@ -28,7 +28,7 @@
                             <td>{{ $loop->iteration }}</td>
                             <td>{{ $item['title'] }}</td>
                             <td>{{ showContent($item['content']) }}</td>
-                            <td>{{ showFile($item['file_path']) }}</td>
+                            <td>{{ showFile(asset($item['file_path'])) }}</td>
                             <td class="d-flex">
                                 <a href="{{ route('subject.subjectmatter.show', [$data['id'], $item['id']]) }}" class="btn btn-success mr-2"
                                     title="Detail">

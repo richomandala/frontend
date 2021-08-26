@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Storage;
 
 class ClassworkController extends Controller
 {
@@ -46,10 +47,12 @@ class ClassworkController extends Controller
         ]);
 
         try {
+            $file = $request->file('file_path');
+            $file_name = Storage::disk('public')->put('upload', $file);
             $data = [
                 'student_id' => session('student_id'),
                 'subject_matter_id' => $id,
-                'file_path' => $request->post('file_path')
+                'file_path' => 'storage/' . $file_name
             ];
     
             $store = Http::withToken(session('token'))->asJson()

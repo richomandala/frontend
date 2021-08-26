@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class SubjectmatterController extends Controller
 {
@@ -75,11 +77,13 @@ class SubjectmatterController extends Controller
         ]);
 
         try {
+            $file = $request->file('file_path');
+            $file_name = Storage::disk('public')->put('upload', $file);
             $data = [
                 'classroom_id' => $id,
                 'title' => $request->post('title'),
                 'content' => $request->post('content'),
-                'file_path' => $request->post('file_path'),
+                'file_path' => 'storage/' . $file_name,
                 'is_task' => $request->post('is_task')
             ];
     
